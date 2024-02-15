@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <h1>Detail Lomba</h1>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlParams.entries());
+      const id = params.id;
+      const API_URL = `https://0b8b-36-80-110-174.ngrok-free.app/competitions/${id}`;
+
+      fetch(API_URL)
+        .then((res) => res.json())
+        .then((object) => {
+          console.log(object);
+          let div = document.createElement("div");
+          div.style.backgroundColor = "lightgrey";
+          div.style.padding = "10px";
+          div.innerHTML = `
+          <h2>${object.data.title}</h2>
+          <img style="height:100px;width:100px; background-size:auto;" src="https://0b8b-36-80-110-174.ngrok-free.app${object.data.image}" />
+          <p>${object.data.category}</p>
+          <p>${object.data.description}</p>
+          <p>Harga: ${object.data.prize}</p>
+          <p>Pendaftaran Terakhir: ${object.data.registration_deadline}</p>
+          <p>Biaya Pendaftaran: ${object.data.registration_fee}</p>
+          <button class="back">Kembali</button>
+          <button class="delete">Delete</button>
+          <button class="edit">Edit</button>
+            `;
+          document.body.appendChild(div);
+          document.querySelector(".back").addEventListener("click", () => {
+            window.location.href = "https://0b8b-36-80-110-174.ngrok-free.app/";
+          });
+          document.querySelector(".delete").addEventListener("click", () => {
+            fetch(API_URL, {
+              method: "DELETE",
+            })
+              .then((res) => res.json())
+              .then((object) => {
+                alert("Lomba berhasil dihapus");
+                window.location.href = "https://0b8b-36-80-110-174.ngrok-free.app/";
+              });
+          });
+          document.querySelector(".edit").addEventListener("click", () => {
+            window.location.href = `https://0b8b-36-80-110-174.ngrok-free.app/lombaEdit.html?id=${object.data.id}`;
+          });
+        });
+    </script>
+  </body>
+</html>

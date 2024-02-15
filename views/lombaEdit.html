@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <h1>Edit Lomba h3h3</h1>
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlParams.entries());
+      const id = params.id;
+      const API_URL = `https://0b8b-36-80-110-174.ngrok-free.app/competitions/${id}`;
+
+      fetch(API_URL)
+        .then((res) => res.json())
+        .then((object) => {
+          console.log(object);
+          let div = document.createElement("div");
+          div.style.backgroundColor = "lightgrey";
+          div.style.padding = "10px";
+          div.innerHTML = `
+            <h2>${object.data.title}</h2>
+            <img style="height:100px;width:100px; background-size:auto;" src="https://0b8b-36-80-110-174.ngrok-free.app${object.data.image}" />
+            <p>${object.data.category}</p>
+            <p>${object.data.description}</p>
+            <p>Harga: ${object.data.prize}</p>
+            <p>Pendaftaran Terakhir: ${object.data.registration_deadline}</p>
+            <p>Biaya Pendaftaran: ${object.data.registration_fee}</p>
+            <form id="edit-form">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" value="${object.data.title}" />
+          <label for="category">Category</label>
+          <input type="text" id="category" name="category" value="${object.data.category}" />
+          <label for="description">Description</label>
+          <input type="text" id="description" name="description" value="${object.data.description}" />
+          <label for="prize">Prize</label>
+          <input type="text" id="prize" name="prize" value="${object.data.prize}" />
+          <label for="registration_deadline">Registration Deadline</label>
+          <input type="text" id="registration_deadline" name="registration_deadline" value="${object.data.registration_deadline}" />
+          <label for="registration_fee">Registration Fee</label>
+          <input type="text" id="registration_fee" name="registration_fee" value="${object.data.registration_fee}" />
+          <button type="submit">Submit</button>
+            </form>
+            <button class="back">Kembali</button>
+          `;
+          document.body.appendChild(div);
+          document.querySelector("#edit-form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const title = document.querySelector("#title").value;
+            const category = document.querySelector("#category").value;
+            const description = document.querySelector("#description").value;
+            const prize = document.querySelector("#prize").value;
+            const registration_deadline = document.querySelector("#registration_deadline").value;
+            const registration_fee = document.querySelector("#registration_fee").value;
+            fetch(API_URL, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                title,
+                category,
+                description,
+                prize,
+                registration_deadline,
+                registration_fee,
+              }),
+            })
+              .then((res) => res.json())
+              .then((object) => {
+                alert("Lomba berhasil diubah");
+                window.location.href = `https://0b8b-36-80-110-174.ngrok-free.app/`;
+              });
+          });
+          document.querySelector(".back").addEventListener("click", () => {
+            window.location.href = `https://0b8b-36-80-110-174.ngrok-free.app/lombaDetails.html?id=${object.data.id}`;
+          });
+        });
+    </script>
+  </body>
+</html>

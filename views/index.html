@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="../styles.css" type="text/css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: auto;
+      }
+      #lomba-list {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="text-white">Rekomendasi Lomba</h1>
+    <div id="lomba-list"></div>
+    <script>
+      const API_URL = "http://localhost:3001/competitions";
+      const ngrok = "https://0b8b-36-80-110-174.ngrok-free.app/competitions";
+
+      fetch(ngrok)
+        .then((res) => res.json())
+        .then((object) => {
+          object.data[0].forEach((product) => {
+            let div = document.createElement("div");
+            div.style.backgroundColor = "lightgrey";
+            div.style.padding = "10px";
+            div.innerHTML = `
+                <h2>${product.title}</h2>
+                <img style="height:100px;width:100px; background-size:auto;" src="http://localhost:3001${product.image}" />
+                <p>${product.category}</p>
+`;
+            document.getElementById("lomba-list").appendChild(div);
+
+            div.addEventListener("click", () => {
+              window.location.href = `https://0b8b-36-80-110-174.ngrok-free.app/lombaDetails.html?id=${product.id}`;
+            });
+          });
+        });
+    </script>
+  </body>
+</html>
