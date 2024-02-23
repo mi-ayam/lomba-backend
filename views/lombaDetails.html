@@ -11,9 +11,9 @@
       const urlParams = new URLSearchParams(window.location.search);
       const params = Object.fromEntries(urlParams.entries());
       const id = params.id;
-      const API_URL = `https://0b8b-36-80-110-174.ngrok-free.app/competitions/${id}`;
+      const API_URL = `https://concrete-pika-noticeably.ngrok-free.app/`;
 
-      fetch(API_URL)
+      fetch(API_URL + `competitions/${id}`)
         .then((res) => res.json())
         .then((object) => {
           console.log(object);
@@ -22,7 +22,7 @@
           div.style.padding = "10px";
           div.innerHTML = `
           <h2>${object.data.title}</h2>
-          <img style="height:100px;width:100px; background-size:auto;" src="https://0b8b-36-80-110-174.ngrok-free.app${object.data.image}" />
+          <img style="height:100px;width:100px; background-size:auto;" src="${API_URL}${object.data.image}"/>
           <p>${object.data.category}</p>
           <p>${object.data.description}</p>
           <p>Harga: ${object.data.prize}</p>
@@ -34,7 +34,7 @@
             `;
           document.body.appendChild(div);
           document.querySelector(".back").addEventListener("click", () => {
-            window.location.href = "https://0b8b-36-80-110-174.ngrok-free.app/";
+            window.location.href = API_URL;
           });
           document.querySelector(".delete").addEventListener("click", () => {
             fetch(API_URL, {
@@ -43,11 +43,11 @@
               .then((res) => res.json())
               .then((object) => {
                 alert("Lomba berhasil dihapus");
-                window.location.href = "https://0b8b-36-80-110-174.ngrok-free.app/";
+                window.location.href = API_URL;
               });
           });
           document.querySelector(".edit").addEventListener("click", () => {
-            window.location.href = `https://0b8b-36-80-110-174.ngrok-free.app/lombaEdit.html?id=${object.data.id}`;
+            window.location.href = `${API_URL}lombaEdit.html?id=${object.data.id}`;
           });
         });
     </script>

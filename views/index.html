@@ -22,10 +22,8 @@
     <h1 class="text-white">Rekomendasi Lomba</h1>
     <div id="lomba-list"></div>
     <script>
-      const API_URL = "http://localhost:3001/competitions";
-      const ngrok = "https://0b8b-36-80-110-174.ngrok-free.app/competitions";
-
-      fetch(ngrok)
+      const API_URL = "https://concrete-pika-noticeably.ngrok-free.app/";
+      fetch(API_URL + "competitions")
         .then((res) => res.json())
         .then((object) => {
           object.data[0].forEach((product) => {
@@ -40,7 +38,7 @@
             document.getElementById("lomba-list").appendChild(div);
 
             div.addEventListener("click", () => {
-              window.location.href = `https://0b8b-36-80-110-174.ngrok-free.app/lombaDetails.html?id=${product.id}`;
+              window.location.href = `${API_URL}lombaDetails.html?id=${product.id}`;
             });
           });
         });

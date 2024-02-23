@@ -11,9 +11,9 @@
       const urlParams = new URLSearchParams(window.location.search);
       const params = Object.fromEntries(urlParams.entries());
       const id = params.id;
-      const API_URL = `https://0b8b-36-80-110-174.ngrok-free.app/competitions/${id}`;
+      const API_URL = "https://concrete-pika-noticeably.ngrok-free.app/";
 
-      fetch(API_URL)
+      fetch(API_URL + `competitions/${id}`)
         .then((res) => res.json())
         .then((object) => {
           console.log(object);
@@ -22,7 +22,7 @@
           div.style.padding = "10px";
           div.innerHTML = `
             <h2>${object.data.title}</h2>
-            <img style="height:100px;width:100px; background-size:auto;" src="https://0b8b-36-80-110-174.ngrok-free.app${object.data.image}" />
+            <img style="height:100px;width:100px; background-size:auto;" src="${API_URL}${object.data.image}" />
             <p>${object.data.category}</p>
             <p>${object.data.description}</p>
             <p>Harga: ${object.data.prize}</p>
@@ -41,6 +41,8 @@
           <input type="text" id="registration_deadline" name="registration_deadline" value="${object.data.registration_deadline}" />
           <label for="registration_fee">Registration Fee</label>
           <input type="text" id="registration_fee" name="registration_fee" value="${object.data.registration_fee}" />
+          <label for="image">Registration Fee</label>
+          <input type="file" id="image" name="image"  />
           <button type="submit">Submit</button>
             </form>
             <button class="back">Kembali</button>
@@ -54,7 +56,8 @@
             const prize = document.querySelector("#prize").value;
             const registration_deadline = document.querySelector("#registration_deadline").value;
             const registration_fee = document.querySelector("#registration_fee").value;
-            fetch(API_URL, {
+            const image = document.querySelector("#image").files[0];
+            fetch(API_URL + `competitions/${id}`, {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",
@@ -66,16 +69,17 @@
                 prize,
                 registration_deadline,
                 registration_fee,
+                image,
               }),
             })
               .then((res) => res.json())
               .then((object) => {
                 alert("Lomba berhasil diubah");
-                window.location.href = `https://0b8b-36-80-110-174.ngrok-free.app/`;
+                window.location.href = API_URL;
               });
           });
           document.querySelector(".back").addEventListener("click", () => {
-            window.location.href = `https://0b8b-36-80-110-174.ngrok-free.app/lombaDetails.html?id=${object.data.id}`;
+            window.location.href = `${API_URL}lombaDetails.html?id=${object.data.id}`;
           });
         });
     </script>
