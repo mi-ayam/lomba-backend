@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const fileupload = require('express-fileupload')
+const cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var competitionsRouter = require('./routes/competitions')
@@ -21,7 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileupload())
-
+app.use(cors())
 
 app.use('/', indexRouter);
 app.use('/competitions', competitionsRouter)
