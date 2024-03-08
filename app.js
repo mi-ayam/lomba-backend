@@ -22,7 +22,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(fileupload())
-app.use(cors())
+
+const corsOptions = {
+    origin: '*', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTION',
+    allowedHeaders: 'Content-Type,Authorization',
+  };
+
+app.use(cors(corsOptions))
 
 app.use('/', indexRouter);
 app.use('/competitions', competitionsRouter)
