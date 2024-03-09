@@ -2,7 +2,7 @@ const {competitions} = require("../models")
 const path = require("path");
 const fs = require("fs");
 
-
+const {imageValidation} = require("../validations/image.validation") 
 
 exports.getAllCompetitions = async(req,res) =>{
     const data = await competitions.findAll()
@@ -40,20 +40,22 @@ exports.addCompetition = async (req,res) =>{
 
     const {title,category,description,registration_fee,prize,registration_deadline} = req.body
     
-    let image = req.files.image
-    const filename = `/images/${title}.jpg`
-    image.mv(path.join(path.dirname(__dirname),'public',filename))
 
+    const image = req.files.image
+    const imageExtension = image.name.split('.').pop()
+    const fileTitle = title.split(' ').join('-')
+    const filename = `/images/${fileTitle}.${imageExtension}`
+
+    image.mv(path.join(path.dirname(__dirname),'public',filename))
     const data  = await competitions.create({
         title,
         category,
         description,
-        registration_fee,
-        prize,
+        registration_fee : Number(registration_fee),
+        prize : Number(prize), 
         registration_deadline,
         image : filename
     })
-
     return {
         status : 200,
         data : data,
@@ -76,8 +78,11 @@ exports.editCompetition = async(req,res) => {
     }
 
     const {title,category,description,registration_fee,prize,registration_deadline} = req.body
-    let image = req.files.image
-    const filename = `/images/${title}.jpg`
+    
+    const image = req.files.image
+    const fileTitle = title.split(' ').join('-')
+    const imageExtension = image.name.split('.').pop()
+    const filename = `/images/${fileTitle}.${imageExtension}`
 
     if(image){
         const filenameold = data[0].image
