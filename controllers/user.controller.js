@@ -1,4 +1,5 @@
 const userService = require("../services/users.service")
+const {validation} = require("../validations/user.validation")
 
 exports.getAllUsers = async(req,res) => {
     const data = await userService.getAllUsers(req,res)
@@ -11,11 +12,30 @@ exports.getUserByID = async (req,res) =>{
 }
 
 exports.createUser = async(req,res) =>{
+
+    const {error} = validation.addUser(req.body)
+    
+    if(error){
+        return res.status(400).json({
+            status : 400,
+            message : error.details[0].message
+        })
+    }
+
     const result = await userService.createUser(req,res)
     return res.status(result.status).json(result)
 }
 
 exports.editUser = async(req,res) =>{
+    const {error} = validation.addUser(req.body)
+    
+    if(error){
+        return res.status(400).json({
+            status : 400,
+            message : error.details[0].message
+        })
+    }
+
     const result =  await userService.editUser(req,res)
     return res.status(result.status).json(result)
 }
