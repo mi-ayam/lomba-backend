@@ -1,4 +1,5 @@
 const {users} = require('../models');
+const bcrypt = require('bcrypt');
 
 exports.getAllUsers = async(req,res) =>{
     const data = await users.findAll()
@@ -32,19 +33,34 @@ exports.getUserByID = async (req,res) =>{
 
 exports.createUser = async (req,res) =>{
     const {firstName, lastName, age, username, email, password} = req.body
-    const data  = await users.create({
+    
+    const user = await users.findOne({
+        where : {
+            username
+        }
+    })
+    
+    if(user){
+        return {
+            status : 400,
+            message : "Username already exists"
+        }
+    }
+    const hash = bcrypt.hashSync(password, 10);
+
+    const data = await users.create({
         firstName,
         lastName,
         age,
         username,
         email,
-        password
+        password : hash
     })
 
     return {
         status : 200,
         data : data,
-        message : "Success add user"
+        message : "Success create user"
     }
 }
 
