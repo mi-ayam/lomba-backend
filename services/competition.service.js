@@ -3,13 +3,21 @@ const path = require("path");
 const fs = require("fs");
 
 const {imageValidation} = require("../validations/image.validation") 
+const {rupiahFormat} = require("../helpers/rupiahformat")
 
 exports.getAllCompetitions = async(req,res) =>{
     const data = await competitions.findAll()
+    
+    //convert registration_fee and prize to rupiah format
+    const dataConverted = data.map((item) => {
+        item.prize = rupiahFormat(item.prize)
+        item.registration_fee = rupiahFormat(item.registration_fee)
+        return item
+    })
 
     return {
         status : 200,
-        data : data,
+        data : dataConverted,
         messages : "Success get all data"
     }
 }
@@ -21,6 +29,10 @@ exports.getCompetitionByID = async (req,res) =>{
             id : req.params.id
         }
     })
+
+    data.dataValues.prize = rupiahFormat(data.dataValues.prize)
+    data.dataValues.registration_fee = rupiahFormat(data.dataValues.registration_fee)
+
     if(data.length != 0){
         return {
             status : 200,
