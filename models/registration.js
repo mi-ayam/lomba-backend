@@ -1,4 +1,5 @@
 'use strict';
+const { data } = require('autoprefixer');
 const {
   Model
 } = require('sequelize');
@@ -15,7 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   }
   registration.init({
     userID: DataTypes.INTEGER,
-    competitionID: DataTypes.INTEGER
+    competitionID: DataTypes.INTEGER,
+    status : DataTypes.STRING,
+    vaNumber : DataTypes.STRING,
+    order_id : DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'registration',
